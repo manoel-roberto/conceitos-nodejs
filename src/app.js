@@ -47,7 +47,7 @@ app.put("/repositories/:id", (request, response) => {
     url,
     title,
     techs,
-    likes: 0,
+    likes: repositories[repositoryIndex].likes,
   };
 
   repositories[repositoryIndex] = repository;
@@ -61,7 +61,7 @@ app.delete("/repositories/:id", (request, response) => {
   const repositoryIndex = repositories.findIndex(repository => repository.id === id);
 
   if (repositoryIndex < 0) {
-    return response.status(400).json({ error: 'Repositury not found.'})
+    return response.status(400).json({ error: 'Repository not found.'})
   };
 
   repositories.splice(repositoryIndex, 1);
@@ -79,11 +79,9 @@ app.post("/repositories/:id/like", (request, response) => {
     return response.status(400).json({ error: 'Repository not found.'});
   };
 
-  const repository = repositories.find(repository => repository.id === id);
+  repositories[repositoryIndex].likes++;
 
-  repository.likes += 1;
-
-  return response.json(repository);
+  return response.json(repositories[repositoryIndex]);
 
 });
 
